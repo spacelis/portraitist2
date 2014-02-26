@@ -1,0 +1,28 @@
+{
+  "name": "portraitist",
+  "version": "0.0.1",
+  "authors": [
+    "wenli <spacelis@gmail.com>"
+  ],
+  "description": "A profiling to for social media.",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "1.2.13",
+    "bootstrap": "~3.1.1",
+    "crossfilter": "1.3.7",
+    "dc.js": "https://github.com/spacelis/dc.js.git#master",
+    "requirejs": "~2.1.10",
+    "requirejs-plugins": "~1.0.2",
+    "wordcloud2.js": "https://github.com/timdream/wordcloud2.js.git#master",
+    "gmaps": "~0.4.9",
+    "wordfreq": "https://github.com/timdream/wordfreq.git#master"
+  }
+}

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  </head>
+  <body>
+    <div ng-controller="ResourceCtrl as ctrl">
+      <apiendpoint id="apiendpoint-1" data-url="http://localhost:8080/test/data/test.csv"></apiendpoint>
+      <tagcloud id="tagcloud-1" data-dimension="text" name="MyTags"></tagcloud>
+      <timeline id="timeline-1" data-dimension="date" data-scale="hour" name="Timeline"></timeline>
+      <piechart id="piechart-2" data-dimension="event" name="Event"></piechart>
+      <googlemap id="map-1" data-format="name=pid,id=pid" name="MyMap"></googlemap>
+    </div>
+    <script data-main="/js/portraitist" src="/lib/requirejs/require.js"></script>
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.css" type="text/css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="/lib/dc.js/dc.css" type="text/css" media="screen" title="no title" charset="utf-8">
+  </body>
+</html>

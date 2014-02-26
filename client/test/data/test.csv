@@ -1,0 +1,10 @@
+date,event,pid,lat,lng,text
+"2013-1-1 8:00","你好","EWI",51.9986345,4.3734436,"A function that performs no operations. This function can be useful when writing code in the"
+"2013-1-2 9:00","hello","TPM",52.0027189,4.3703293,"Returns a function which calls function fn bound to self (self becomes the this for"
+"2013-1-2 15:00","hello","CiTG",51.9989047,4.3758469,"Use this function to manually start up angular application."
+"2013-1-3 8:00","お早う","EWI",51.9986345,4.3734436,"Specify custom behavior on keyup event."
+"2013-1-3 9:00","お早う","EWI",51.9986345,4.3734436,"The $location service parses the URL in the browser address bar (based on the"
+"2013-1-3 15:00","你好","TPM",52.0027189,4.3703293,"Use the $locationProvider to configure how the application deep linking paths are stored."
+"2013-1-4 7:00","hello","EWI",51.9986345,4.3734436,"Allows you to convert a JavaScript object into JSON string."
+"2013-1-4 12:00","hello","CiTG",51.9989047,4.3758469,"Evaluate the given expression when the user changes the input."
+"2013-1-4 13:00","お早う","CiTG",51.9989047,4.3758469,"Creates a binding that will innerHTML the result of evaluating the expression into the current"

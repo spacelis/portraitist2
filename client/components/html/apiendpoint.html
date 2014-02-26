@@ -1,0 +1,32 @@
+<div class="form-horizontal" role="form">
+  <div class="form-group">
+    <div class="form-group">
+      <label for="apiendpoint" class="col-sm-2 control-label">API Endpoint:</label>
+      <div class="col-sm-8">
+        <input name="apiendpoint" type="text" class="form-control" placeholder="{{url}}" ng-model="url">
+      </div>
+      <div class="col-md-2">
+        <button type="button" class="btn btn-primary" ng-click="get(url)">Get</button>
+        <button class="btn btn-default" data-toggle="modal" data-target="#source-config">Config</button>
+      </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="source-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">Source Configuration</h4>
+          </div>
+          <div class="modal-body">
+            ...
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
