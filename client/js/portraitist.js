@@ -4,7 +4,7 @@
 require.config({
   baseUrl: '/js',
   paths: {
-    jQuery: '/lib/jquery/jquery',
+    jQuery: '/lib/jquery/dist/jquery',
     angular: '/lib/angular/angular',
     bootstrap: '/lib/bootstrap/dist/js/bootstrap',
     crossfilter: '/lib/crossfilter/crossfilter',

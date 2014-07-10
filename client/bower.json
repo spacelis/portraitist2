@@ -15,14 +15,14 @@
     "tests"
   ],
   "dependencies": {
-    "angular": "1.2.13",
-    "bootstrap": "~3.1.1",
-    "crossfilter": "1.3.7",
-    "dc.js": "~1.7.0",
-    "requirejs": "~2.1.10",
-    "requirejs-plugins": "~1.0.2",
+    "angular": ">=1.2.13",
+    "bootstrap": ">=3.1.1",
+    "crossfilter": ">=1.3.7",
+    "dc.js": ">=1.7.1",
+    "requirejs": ">=2.1.10",
+    "requirejs-plugins": ">=1.0.2",
     "wordcloud2.js": "https://github.com/timdream/wordcloud2.js.git#master",
-    "gmaps": "~0.4.9",
+    "gmaps": ">=0.4.9",
     "wordfreq": "https://github.com/timdream/wordfreq.git#master"
   }
 }
