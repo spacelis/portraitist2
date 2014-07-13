@@ -4,7 +4,7 @@
   </head>
   <body>
     <div ng-controller="ResourceCtrl as ctrl">
-      <apiendpoint id="apiendpoint-1" data-url="http://localhost:8080/test/data/test.csv"></apiendpoint>
+      <datasource id="datasource-1" data-url="http://localhost:8080/examples/data/test.csv" data-parsetime="date"></datasource>
       <tagcloud id="tagcloud-1" data-dimension="text" name="MyTags"></tagcloud>
       <timeline id="timeline-1" data-dimension="date" data-scale="hour" name="Timeline"></timeline>
       <piechart id="piechart-2" data-dimension="event" name="Event"></piechart>

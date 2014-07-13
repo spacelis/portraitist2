@@ -5,11 +5,13 @@ require.config({
   baseUrl: '/js',
   paths: {
     jQuery: '/lib/jquery/dist/jquery',
+    jQueryUI: '/lib/jquery-ui/jquery-ui',
+    underscore: '/lib/underscore/underscore',
     angular: '/lib/angular/angular',
     bootstrap: '/lib/bootstrap/dist/js/bootstrap',
     crossfilter: '/lib/crossfilter/crossfilter',
     d3: '/lib/d3/d3',
-    dc: '/lib/dc.js/dc',  // should use a version supporting AMD
+    dc: '/lib/dc.js/dc',
     csv: '/lib/jquery-csv/src/jquery.csv',
     GMaps: '/lib/gmaps/gmaps',
     async: '/lib/requirejs-plugins/src/async',
@@ -17,7 +19,9 @@ require.config({
     wordcloud: '/lib/wordcloud2.js/src/wordcloud2',
   },
   shim: {
+    underscore: {exports: 'underscore'},
     jQuery: {exports : 'jQuery'},
+    jQueryUI: {exports : 'jQueryUI', deps: ['jQuery']},
     angular : {exports : 'angular', deps: ['jQuery']},
     bootstrap: {exports : 'bootstrap', deps: ['jQuery']},
     crossfilter: {exports: 'crossfilter'},
@@ -28,7 +32,7 @@ require.config({
 require([
     'angular',
     'bootstrap',
-    '/components/js/apiendpoint.js',
+    '/components/js/datasource.js',
     '/components/js/chart.js',
     '/components/js/googlemap.js',
     '/components/js/tagcloud.js'

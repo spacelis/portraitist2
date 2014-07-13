@@ -1,0 +1,41 @@
+<div class="panel panel-default">
+  <div class="panel-footer">Data Source</div>
+  <div class="panel-body" style="float: none">
+
+    <div class="form-horizontal" role="form">
+      <div class="form-group">
+        <div class="form-group">
+          <div class="row">
+            <div class="col-md-10">
+              <input name="apiendpoint" type="text" class="form-control" placeholder="{{url}}" ng-model="url">
+            </div>
+            <div class="col-md-2">
+              <button type="button" class="btn btn-primary" ng-click="get(url)">Get</button>
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#{{widget_id}}-settings-modal">Setting</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id='{{widget_id}}-settings-modal'>
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">Data Source Settings</h4>
+          </div>
+          <div class="modal-body">
+            <label for="parsetime">Date/Time Fields: </label>
+            <input type="text" ng-model="parsetime" />
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+  </div>
+</div>
