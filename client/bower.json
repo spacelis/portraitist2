@@ -23,6 +23,9 @@
     "wordcloud2.js": "timdream/wordcloud2.js",
     "gmaps": ">=0.4.9",
     "wordfreq": "timdream/wordfreq",
-    "jquery-csv": "*"
+    "jquery-csv": "*",
+    "jquery-ui": "~1.11.0",
+    "underscore": "~1.6.0",
+    "jasmine": "~2.0.0"
   }
 }
