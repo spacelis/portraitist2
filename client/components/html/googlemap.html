@@ -1,5 +1,40 @@
 <div class="panel panel-default">
-  <div class="panel-heading">{{chart_name}}</div>
+  <div class="panel-heading">
+    <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#{{widget_id}}-settings-modal">
+        <span class="glyphicon glyphicon-cog"></span>
+    </button>
+    {{chart_name}}
+  </div>
+
+  <div class="modal fade" id='{{widget_id}}-settings-modal'>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <h4 class="modal-title">Data Source Settings</h4>
+        </div>
+        <div class="modal-body">
+          <label for="parsetime">Id Fields: </label>
+          <input type="text" ng-model="field_id" />
+          <label for="parsetime">Latitude Fields: </label>
+          <input type="text" ng-model="field_lat" />
+          <label for="parsetime">Longitude Fields: </label>
+          <input type="text" ng-model="field_lon" />
+          <label for="parsetime">Label Fields: </label>
+          <input type="text" ng-model="field_label" />
+          <label for="parsetime">Text Fields: </label>
+          <input type="text" ng-model="field_text" />
+
+          <label for="parsetime"> Max Number of POI: </label>
+          <input type="text" ng-model="at_most" />
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
   <div class="panel-body">
     <div class="pt-map-canvas"></div>
   </div>

@@ -1,40 +1,38 @@
 /* global define */
 
-define(['angular', 'resource_ctrl', 'GMaps'], function(angular, ResourceCtrl, GMaps){
+define(['angular', 'resource_ctrl', 'GMaps', 'underscore', 'utils'], function(angular, ResourceCtrl, GMaps, _, utils){
   console.log('construct directive PIECHART');
-  return ResourceCtrl.directive('googlemap', ['$window', '$parse', function(window, parse){
+  return ResourceCtrl.directive('googlemap', function(){
     console.log('init directive GOOGLEMAP');
     function link(scope, element, attr){
       scope.chart_name = attr.name;
-      var component_id = attr.id;
+      scope.widget_id = attr.id;
       var globals = scope.$parent.globals;
 
       // Build customized mapping creation
-      var mapping = {id: parse('id'), name: parse('name'), lat: parse('lat'), lng: parse('lng')};
-      attr.format.split(',').map(function(d){return d.split('=');}).forEach(function(d){
-        mapping[d[0]]=parse(d[1]);});
-      var placeformat = function(d){
-        var nd = {};
-        for(var n in mapping){
-          nd[n] = mapping[n](d); //TODO may resulting in attribute overwritten
-        }
-        return nd;
-      };
+      // var mapping = {id: parse('id'), name: parse('name'), lat: parse('lat'), lng: parse('lng')};
+      var extr = utils.extractor({
+        id: attr.field_id || 'id',
+        label: attr.field_label || 'name',
+        text: attr.field_text || 'text',
+        lat: attr.field_lat || 'lat',
+        lon: attr.field_lon || 'lon'
+      });
 
       // Build dimension for data
-      var dimension = scope.dimension = globals.data.dimension(function(d){
-        d = placeformat(d);
+      scope.dimension = globals.data.dimension(function(d){
+        d = extr(d);
         d.valueOf = function(){
           return d.id;
         };
         return d;
       });
-      var group = dimension.group().reduceCount();
+      var group = scope.dimension.group().reduceCount();
       scope.map = new GMaps({
         lat: 41.0,
         lng: -100.0,
         height: attr.mapheight || '500px',
-        div: angular.element('#' + component_id + ' .pt-map-canvas')[0],
+        div: angular.element('#' + scope.widget_id + ' .pt-map-canvas')[0],
         zoom: 3,
       });
       // For updating the map
@@ -47,10 +45,10 @@ define(['angular', 'resource_ctrl', 'GMaps'], function(angular, ResourceCtrl, GM
           var poi = pois[i].key;
           scope.map.addMarker({
             lat: poi.lat,
-            lng: poi.lng,
-            title: poi.name, //TODO make customizable
+            lng: poi.lon,
+            title: poi.label,
             infoWindow: {
-              content: poi.name, //TODO make customizable
+              content: poi.text,
             },
             //icon: '/static/profileviewer/images/map_icons/' + poi.category.id + '_black.png',
           });
@@ -69,5 +67,5 @@ define(['angular', 'resource_ctrl', 'GMaps'], function(angular, ResourceCtrl, GM
       templateUrl: '/components/html/googlemap.html',
       link: link
     };
-  }]);
+  });
 });
