@@ -6,7 +6,7 @@ define(['resource_ctrl', 'crossfilter', 'underscore', 'utils', 'jQuery', 'csv'],
     console.log('init directive APIENDPOINT');
     // <apiendpoint id='endpoint1' data-url='https://' data-parsetime='a,b,c' data-format='header1,header2'></apiendpoint>
     function link(scope, element, attr){
-      var component_id = attr.id;
+      scope.widget_id = attr.id;
       var $globals = scope.$parent.globals;
       scope.url = attr.url;
       scope.format = attr.format;
@@ -27,7 +27,7 @@ define(['resource_ctrl', 'crossfilter', 'underscore', 'utils', 'jQuery', 'csv'],
         });
       };
       scope.config = function(){};
-      $globals.add_source(component_id, scope);
+      $globals.add_source(scope.widget_id, scope);
     }
     return {
       scope: true,

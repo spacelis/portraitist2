@@ -1,4 +1,4 @@
-date,event,pid,lat,lng,text
+date,event,pid,lat,lon,text
 "2013-1-1 8:00","你好","EWI",51.9986345,4.3734436,"A function that performs no operations. This function can be useful when writing code in the"
 "2013-1-2 9:00","hello","TPM",52.0027189,4.3703293,"Returns a function which calls function fn bound to self (self becomes the this for"
 "2013-1-2 15:00","hello","CiTG",51.9989047,4.3758469,"Use this function to manually start up angular application."

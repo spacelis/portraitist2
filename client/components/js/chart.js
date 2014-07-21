@@ -1,14 +1,14 @@
 /* global define */
 
-define(['resource_ctrl', 'd3', 'dc'], function(ResourceCtrl, d3, dc){
+define(['resource_ctrl', 'd3', 'dc', 'underscore', 'utils'], function(ResourceCtrl, d3, dc, _){
   console.log('construct directive PIECHART');
-  var piechart = ResourceCtrl.directive('piechart', ['$window', '$parse', function(window, parse){
+  var piechart = ResourceCtrl.directive('piechart', function($parse){
     console.log('init directive PIECHART');
     function link(scope, element, attr){
       scope.chart_name = attr.name;
       var component_id = attr.id;
       var globals = scope.$parent.globals;
-      var dim = parse(attr.dimension);
+      var dim = $parse(attr.dimension);
       var dimension = globals.data.dimension(dim);
       var group = dimension.group().reduceCount();
       var chart = dc.pieChart('#' + component_id + ' .panel-body')
@@ -29,16 +29,16 @@ define(['resource_ctrl', 'd3', 'dc'], function(ResourceCtrl, d3, dc){
       templateUrl: '/components/html/chart.html',
       link: link
     };
-  }]);
+  });
 
-  var timeline = ResourceCtrl.directive('timeline', ['$window', '$parse', function(window, parse){
-    console.log('init directive PIECHART');
+  var timeline = ResourceCtrl.directive('timeline', function($parse){
+    console.log('init directive timeline');
     function link(scope, element, attr){
       scope.chart_name = attr.name;
       var component_id = attr.id;
       var globals = scope.$parent.globals;
       var scale = attr.scale;
-      var dim = parse(attr.dimension);
+      var dim = $parse(attr.dimension);
       var dimension = globals.data.dimension(function(d){
         return d3.time[scale](new Date(dim(d)));
       });
@@ -72,6 +72,6 @@ define(['resource_ctrl', 'd3', 'dc'], function(ResourceCtrl, d3, dc){
       templateUrl: '/components/html/chart.html',
       link: link
     };
-  }]);
+  });
   return {piechart: piechart, timeline: timeline};
 });
