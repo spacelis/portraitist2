@@ -18,3 +18,11 @@ define ['utils'], (utils) ->
       adder obj
       (expect obj['x']['y']['z']).toEqual 2
       (expect obj['x']['a']).toEqual 12
+
+  describe 'extractor', ->
+    it 'extract z for {x: {y: {z: 1}, a: 2}}', ->
+      zextr = utils.extractor {'z': 'x.y.z', 'a': 'x.a'}
+      (expect zextr {x: {y: {z: 1}, a: 2}}).toEqual {z: 1, a: 2}
+    it 'extract z for {x: {y: {z: 1}, a: 2}}', ->
+      zextr = utils.extractor {'z': 'x.y.z', 'a': 'x.a'}
+      (expect zextr {x: {y: {z: 1}}}).toEqual {z: 1, a: null}

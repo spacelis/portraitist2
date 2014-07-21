@@ -3,9 +3,10 @@
 define(['underscore'], function(_){
   // return a funciton that will extract the element specified by the path
   // in an object.
-  function deepaccessor(path){
+  // arg: path a list of keys to the value to access to
+  function deepaccessor(keypath){
     return function(obj){
-      return _.reduce(path, function(memo, p){
+      return _.reduce(keypath, function(memo, p){
         if(typeof(memo)==="object" && _.has(memo, p)){
           return memo[p];
         }
@@ -15,6 +16,8 @@ define(['underscore'], function(_){
       }, obj);
     };
   }
+
+  function parse_dotnotation(path){}
 
   // return a parser that will transform the data by a given function.
   // the paths should be an object where the keys are path to the element
@@ -34,8 +37,24 @@ define(['underscore'], function(_){
       return d;
     };
   }
+
+  // Return an extractor that will extract a subset of attributes of json
+  // objects.
+  function extractor(projection){
+    var mapping = _.object(_.map(_.pairs(projection), function(d){
+      var projection = d[0], path = d[1].split('.');
+      return [projection, deepaccessor(path)];
+    }));
+    return function(d){
+      return _.object(_.map(_.pairs(mapping), function(x){
+        var projection = x[0], da = x[1];
+        return [projection, da(d)];
+      }));
+    };
+  }
   return {
     deepaccessor: deepaccessor,
     transformer: transformer,
+    extractor: extractor,
   };
 });
