@@ -1,6 +1,7 @@
 /* global define */
 
 define(['underscore'], function(_){
+
   // return a funciton that will extract the element specified by the path
   // in an object.
   // arg: path a list of keys to the value to access to
@@ -17,7 +18,37 @@ define(['underscore'], function(_){
     };
   }
 
-  function parse_dotnotation(path){}
+  var ptn_path_element = /(\\\.|[^.])+/g;
+  var ptn_escape_number = /^@\d+$/;
+  var ptn_unescape_at = /^@@/;
+  function undotted(path){
+    return _.map(_.map(path.match(ptn_path_element), function(pe){
+      if(ptn_escape_number.test(pe)){
+        return parseInt(pe.substr(1));
+      } else if (ptn_unescape_at.test(pe)){
+        return pe.substr(1);
+      } else {
+        return pe;
+      }
+    }), function(pe){
+      if(typeof(pe) === 'string'){
+        return pe.replace(/\\\./, '.');
+      }
+      return pe;
+    });
+  }
+
+  // var ptn_path_element = /(@\d+|@@[^.]*|(\\\.|[^.])+)/g;
+  // var ptn_escape_number = /^@\d+$/;
+  // var ptn_unescape_at = /^@@/;
+  // var ptn_escape_dot = /\\\./;
+  // function undotted(path){
+  //   return _.map(path.match(ptn_path_element), function(e){
+  //     if(ptn_escape_number.test(e)){
+  // TODO fix this function
+  //     }
+  //   })
+  // }
 
   // return a parser that will transform the data by a given function.
   // the paths should be an object where the keys are path to the element
@@ -56,5 +87,6 @@ define(['underscore'], function(_){
     deepaccessor: deepaccessor,
     transformer: transformer,
     extractor: extractor,
+    undotted: undotted,
   };
 });
