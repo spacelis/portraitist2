@@ -1,7 +1,19 @@
 /* global define */
 
-define(['underscore', 'utils'], function(_, u){
+define(['underscore'], function(_){
 
+  /*
+   * Constructing a lenz from a pair of get and set functions.
+   *
+   * Lenzes are combinable accessors for easy manipulating ways of
+   * accessing objects. They can be combined to have nested accessors
+   * and projectors.
+   * Example:
+   *    var accessor_x = lenz(function(a){return a.x;}, function(a, v){return {x: v};});
+   *    var accessor_y = lenz(function(a){return a.y;}, function(a, v){return {y: v};});
+   *    var accessor_xy = accessor_x.com(accessor_y)
+   *    assert(accessor_xy.get({x: {y: 1}}) == 1);
+   */
   function lenz(get, set){
     var l = {};
     l.get = get;
@@ -17,8 +29,14 @@ define(['underscore', 'utils'], function(_, u){
     return l;
   }
 
+  /*
+   * An idendity lenz where x.com(identity) == x == identity.com(x)
+   */
   var identity = lenz(function(x){return x;}, function(x, v){return v;});
 
+  /*
+   * Constructing a lenz for accessing objects' propoerties.
+   */
   function property(key){
     return lenz(
       function(obj){
@@ -42,16 +60,25 @@ define(['underscore', 'utils'], function(_, u){
     );
   }
 
+  /*
+   * Combining a list of lenzes into a nested lenz
+   */
   function chained(ls){
     return _.reduce(ls, function(acc, l){
       return acc.com(l);
     }, identity);
   }
 
+  /*
+   * Constructing a lenz for an object with a list of keys
+   */
   function nested_property(keys){
     return chained(_.map(keys, property));
   }
 
+  /*
+   * Constructing a lenz for an object with a mapping which can be seen as a projector to derive a subset of key-value pairs.
+   */
   function projector(mapping){
     return lenz(
       function(obj){
