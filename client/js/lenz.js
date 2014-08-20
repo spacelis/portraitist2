@@ -72,7 +72,7 @@ define(['underscore'], function(_){
   /*
    * Constructing a lenz for an object with a list of keys
    */
-  function nested_property(keys){
+  function nested_properties(keys){
     return chained(_.map(keys, property));
   }
 
@@ -97,7 +97,7 @@ define(['underscore'], function(_){
     property: property,
     identity: identity,
     chained: chained,
-    nested_property: nested_property,
+    nested_properties: nested_properties,
     projector: projector,
   };
 });

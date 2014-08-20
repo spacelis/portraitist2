@@ -48,17 +48,17 @@ define ['lenz'], (lenz) ->
       (expect lenz_axv.set obj, 10).toEqual {a: {x: {v: 10, w: 2}, y: 3}, b: 4}
       (expect lenz_axv.mod ((x) -> x + 4), obj).toEqual {a: {x: {v: 5, w: 2}, y: 3}, b: 4}
 
-  describe 'nested_property', ->
+  describe 'nested_properties', ->
     it '{x: {y: {z: 1}}}[x, y, z] == 1', ->
-      (expect (lenz.nested_property ['x', 'y', 'z']).get {x: {y: {z: 1}}}).toEqual 1
+      (expect (lenz.nested_properties ['x', 'y', 'z']).get {x: {y: {z: 1}}}).toEqual 1
     it '{x: {y: {z: 1}}}[x, y] == {z: 1}', ->
-      (expect ((lenz.nested_property ['x', 'y']).get {x: {y: {z: 1}}})['z']).toEqual 1
+      (expect ((lenz.nested_properties ['x', 'y']).get {x: {y: {z: 1}}})['z']).toEqual 1
 
   describe 'projector', ->
     it 'project {x: {y: {z: 1}, a: 2}} by {z: x.y.z, a: x.a}', ->
       obj = {x: {y: {z: 1}, a: 2}}
       zextr = lenz.projector
-        'z': lenz.nested_property ['x', 'y', 'z']
-        'a': lenz.nested_property ['x', 'a']
+        'z': lenz.nested_properties ['x', 'y', 'z']
+        'a': lenz.nested_properties ['x', 'a']
       (expect zextr.get obj).toEqual {z: 1, a: 2}
       (expect zextr.set obj, {z: 10, a: 20}).toEqual {x: {y: {z: 10}, a: 20}}
