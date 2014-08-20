@@ -1,28 +1,28 @@
 define ['utils'], (utils) ->
-  describe 'deepaccessor', ->
-    it '{x: {y: {z: 1}}}[x, y, z] == 1', ->
-      (expect (utils.deepaccessor ['x', 'y', 'z']) {x: {y: {z: 1}}}).toEqual 1
-    it '{x: {y: {z: 1}}}[x, y] == {z: 1}', ->
-      (expect ((utils.deepaccessor ['x', 'y']) {x: {y: {z: 1}}})['z']).toEqual 1
-
-  describe 'transformer', ->
-    it 'adder for {x: {y: {z: 1}}}', ->
-      adder = utils.transformer {'x.y.z': (x) -> x + 1}
-      (expect (adder {x: {y: {z: 1}}})['x']['y']['z']).toEqual 2
-    it 'adder2 for {x: {y: {z: 1}, a: 2}}', ->
-      obj = {x: {y: {z: 1}, a: 2}}
-      tfuncs =
-        'x.y.z': (x) -> x + 1
-        'x.a': (x) -> x + 10
-      adder = utils.transformer tfuncs
-      adder obj
-      (expect obj['x']['y']['z']).toEqual 2
-      (expect obj['x']['a']).toEqual 12
 
   describe 'extractor', ->
     it 'extract z for {x: {y: {z: 1}, a: 2}}', ->
       zextr = utils.extractor {'z': 'x.y.z', 'a': 'x.a'}
-      (expect zextr {x: {y: {z: 1}, a: 2}}).toEqual {z: 1, a: 2}
+      (expect zextr.get {x: {y: {z: 1}, a: 2}}).toEqual {z: 1, a: 2}
     it 'extract z for {x: {y: {z: 1}, a: 2}}', ->
       zextr = utils.extractor {'z': 'x.y.z', 'a': 'x.a'}
-      (expect zextr {x: {y: {z: 1}}}).toEqual {z: 1, a: null}
+      (expect zextr.get {x: {y: {z: 1}}}).toEqual {z: 1, a: null}
+
+
+  describe 'dot_notation', ->
+    it 'simple', ->
+      (expect utils.undotted 'x').toEqual ['x']
+      (expect utils.undotted '1').toEqual ['1']
+    it 'escape number', ->
+      (expect utils.undotted '@1').toEqual [1]
+      (expect utils.undotted '@@1').toEqual ['@1']
+    it 'nested', ->
+      (expect utils.undotted 'x.y').toEqual ['x', 'y']
+      (expect utils.undotted 'x.1').toEqual ['x', '1']
+      (expect utils.undotted 'x.@1').toEqual ['x', 1]
+      (expect utils.undotted '@1.x').toEqual [1, 'x']
+    it 'escape dot', ->
+      (expect utils.undotted 'x\\.y').toEqual ['x.y']
+      (expect utils.undotted 'x\\..y').toEqual ['x.', 'y']
+      (expect utils.undotted 'x.\\.y').toEqual ['x', '.y']
+      (expect utils.undotted 'x\\..\\.y').toEqual ['x.', '.y']
