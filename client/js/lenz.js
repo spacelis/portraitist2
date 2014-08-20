@@ -44,7 +44,7 @@ define(['underscore'], function(_){
           return obj[key];
         }
         else{
-          throw new Error(obj.toString() + ' is not an object or does not have property ' + key);
+          return new Error(obj.toString() + ' is not an object or does not have property ' + key);
         }
       },
       function(obj, v){
@@ -53,7 +53,7 @@ define(['underscore'], function(_){
           nobj[key] = v;
         }
         else{
-          throw new Error(obj.toString() + ' is not an object or does not have property ' + key);
+          nobj[key] = new Error(obj.toString() + ' is not an object or does not have property ' + key);
         }
         return nobj;
       }
@@ -92,6 +92,16 @@ define(['underscore'], function(_){
     );
   }
 
+  var error2null = lenz(
+    function(x){
+      if(x instanceof Error) {
+        return null;
+      }
+      else {
+        return x;
+      }},
+    function(x, v){return v;});
+
   return {
     lenz: lenz,
     property: property,
@@ -99,5 +109,6 @@ define(['underscore'], function(_){
     chained: chained,
     nested_properties: nested_properties,
     projector: projector,
+    error2null: error2null,
   };
 });
