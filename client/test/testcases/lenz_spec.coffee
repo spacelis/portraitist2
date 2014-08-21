@@ -1,4 +1,4 @@
-define ['lenz'], (lenz) ->
+define ['lenz', 'underscore'], (lenz, _) ->
   describe 'lenz', ->
     it 'Basic', ->
       obj = {a: 1, b: 2}
@@ -31,6 +31,13 @@ define ['lenz'], (lenz) ->
       (expect lenz_ax.set obj, 10).toEqual {a: {x: 10, y: 2}, b: 3}
       (expect lenz_ax.mod ((x) -> x * 3), obj).toEqual {a: {x: 3, y: 2}, b: 3}
 
+  describe 'map lenz', ->
+    it '[{a: 1, b: 2}, {a:3, b:4}, {a:5, b:6}] property(a).map(_.map) == [1, 3, 5]', ->
+      obj = [{a: 1, b: 2}, {a:3, b:4}, {a:5, b:6}]
+      lr = (lenz.property 'a').map _.map
+      (expect lr.get obj).toEqual [1, 3, 5]
+      (expect lr.set obj, 10).toEqual [{a:10, b:2}, {a:10, b:4}, {a:10, b:6}]
+
   describe 'identity', ->
     it 'Basic', ->
       obj = {a: 1, b: 2}
@@ -62,3 +69,4 @@ define ['lenz'], (lenz) ->
         'a': lenz.deep_property ['x', 'a']
       (expect zextr.get obj).toEqual {z: 1, a: 2}
       (expect zextr.set obj, {z: 10, a: 20}).toEqual {x: {y: {z: 10}, a: 20}}
+

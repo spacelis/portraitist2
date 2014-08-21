@@ -19,6 +19,13 @@ define(['underscore'], function(_){
     l.get = get;
     l.set = set;
     l.mod = function(modf, x){ return set(x, modf(get(x))); };
+    l.map = function(mapf){
+      return lenz(function(a){
+        return mapf(a, get);
+      }, function(a, v){
+        return mapf(a, function(d){return set(d, v)});
+      });
+    };
     l.then = function(ol){
       return lenz(function(x){
         return ol.get(get(x));
@@ -40,20 +47,20 @@ define(['underscore'], function(_){
   function property(key){
     return lenz(
       function(obj){
-        if(typeof(obj)==="object" && _.has(obj, key)){
+        if(typeof(obj)==="object" && obj !== null && _.has(obj, key)){
           return obj[key];
         }
         else{
-          return new Error(obj.toString() + ' is not an object or does not have property ' + key);
+          return new Error(String(obj) + ' is not an object or does not have property ' + key);
         }
       },
       function(obj, v){
         var nobj = _.clone(obj);
-        if(typeof(obj)==="object" && _.has(obj, key)){
+        if(typeof(obj)==="object" && obj !== null && _.has(obj, key)){
           nobj[key] = v;
         }
         else{
-          nobj[key] = new Error(obj.toString() + ' is not an object or does not have property ' + key);
+          nobj[key] = new Error(String(obj) + ' is not an object or does not have property ' + key);
         }
         return nobj;
       }
