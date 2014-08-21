@@ -20,7 +20,8 @@ require.config({
   paths: {
     'jquery': 'lib/jquery/jquery',
     'underscore': 'lib/underscore/underscore',
-    'utils': 'js/utils'
+    'utils': 'js/utils',
+    'lenz': 'js/lenz'
   },
 
   shim: {
