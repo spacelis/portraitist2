@@ -11,9 +11,9 @@
           <div class="form-group" ng-repeat="(setting_name, setting) in settings">
             <label class="col-sm-3 control-label">{{setting.label}}</label>
             <div class="col-sm-9">
-              <input ng-if="setting.type=='text'" type="text" class="form-control" placeholder="{{setting.tip}}" ng-model="setting.value" />
+              <input ng-if="setting.type=='text'" type="text" class="form-control" placeholder="{{setting.tip}}" ng-model="setting.value" ng-change="settings_changed()"/>
               <div ng-if="setting.type=='choice'" ng-repeat="choice in setting.choice">
-                <div class="radio"><label><input type="radio" ng-model="setting.value" value="{{choice}}">{{choice}}</label></div>
+                <div class="radio"><label><input type="radio" ng-model="setting.value" value="{{choice}}" ng-changed="settings_change">{{choice}}</label></div>
               </div>
             </div>
           </div>

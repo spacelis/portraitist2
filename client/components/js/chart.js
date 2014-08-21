@@ -1,26 +1,49 @@
 /* global define */
 
-define(['resource_ctrl', 'd3', 'dc', 'underscore', 'utils'], function(ResourceCtrl, d3, dc, _){
+define(['resource_ctrl', 'd3', 'dc', 'underscore', 'lenz', 'utils'], function(ResourceCtrl, d3, dc, _, L, utils){
   console.log('construct directive PIECHART');
   var piechart = ResourceCtrl.directive('piechart', function($parse){
     console.log('init directive PIECHART');
     function link(scope, element, attr){
-      scope.chart_name = attr.name;
-      var component_id = attr.id;
-      var globals = scope.$parent.globals;
-      var dim = $parse(attr.dimension);
-      var dimension = globals.data.dimension(dim);
-      var group = dimension.group().reduceCount();
-      var chart = dc.pieChart('#' + component_id + ' .panel-body')
-        .dimension(dimension)
-        //.colors(d3.scale.category20())
-        .group(group)
-        .height(200)
-        .width(200);
-      globals.register_renderer('dc', dc.renderAll);
-      globals.register_redrawer('dc', dc.redrawAll);
-      chart.on('filtered', function(){
-        globals.redraw('dc');
+      scope.widget_name = attr.name;
+      scope.widget_id = attr.id
+      scope.globals = scope.$parent.globals;
+      scope.settings = {
+        dimension: {name: 'dimension', label: 'Field', type: 'text', tip: 'The name of a field.', value: '' }, 
+        redmethod: {name: 'redmethod', label: 'Reduce Method', type: 'choice', tip: 'JSON / CSV', choice: ['reduceSum', 'reduceCount'], value: 'reduceCount'},
+      };
+      scope.settings.dimension.value = attr.dimension;
+
+      var chart = dc.pieChart('#' + scope.widget_id + ' .panel-body');
+      scope.chart = chart;
+      function mkchart(){
+        var $globals = scope.globals;
+        var accessor = L.deep_property(utils.undotted(scope.settings.dimension.value)).then(utils.error2null)
+        if(scope._dimension){
+          scope._dimension.dispose();
+        }
+        scope._dimension = $globals.data.dimension(accessor.get);
+        var group = scope._dimension.group()[scope.settings.redmethod.value]();
+        chart
+          .dimension(scope._dimension)
+          .group(group)
+          .height(200)
+          .width(200);
+      }
+      mkchart();
+
+      scope.chart.on('preRender', mkchart);
+      scope.chart.on('filtered', function(){
+        scope.globals.redraw('dc');
+      });
+      scope.settings_changed = function(){
+        chart.render();
+      }
+      scope.globals.register_renderer('dc', function(){
+        dc.renderAll();
+      });
+      scope.globals.register_redrawer('dc', function(){
+        dc.redrawAll
       });
     }
     return {
@@ -34,36 +57,59 @@ define(['resource_ctrl', 'd3', 'dc', 'underscore', 'utils'], function(ResourceCt
   var timeline = ResourceCtrl.directive('timeline', function($parse){
     console.log('init directive timeline');
     function link(scope, element, attr){
-      scope.chart_name = attr.name;
-      var component_id = attr.id;
-      var globals = scope.$parent.globals;
-      var scale = attr.scale;
-      var dim = $parse(attr.dimension);
-      var dimension = globals.data.dimension(function(d){
-        return d3.time[scale](new Date(dim(d)));
+      scope.widget_id = attr.id;
+      scope.widget_name = attr.name;
+      scope.globals = scope.$parent.globals;
+      scope.settings = {
+        dimension: {name: 'dimension', label: 'Field', type: 'text', tip: 'The name of a field.', value: '' }, 
+        scale: {name: 'scale', label: 'Scale', type: 'text', tip: 'The name of a field.', value: 'hour' }, 
+        redmethod: {name: 'redmethod', label: 'Reduce Method', type: 'choice', tip: 'JSON / CSV', choice: ['reduceSum', 'reduceCount'], value: 'reduceCount'},
+      };
+      scope.settings.scale.value = attr.scale;
+      scope.settings.dimension.value = attr.dimension;
+      
+      var chart = dc.barChart('#' + scope.widget_id + ' .panel-body');
+      scope.chart = chart;
+      function mkchart(){
+        var $globals = scope.globals;
+        var accessor = L.deep_property(utils.undotted(scope.settings.dimension.value)).then(utils.str2datetime)
+        if(scope._dimension){
+          scope._dimension.dispose();
+        }
+        scope._dimension = $globals.data.dimension(accessor.get);
+        var dimmin = scope._dimension.bottom(1)[0];
+        var dimmax = scope._dimension.top(1)[0];
+        var group = scope._dimension.group()[scope.settings.redmethod.value]();
+        chart
+          .dimension(scope._dimension)
+          .group(group)
+          .x(d3.time.scale().domain([dimmin, dimmax]))
+          .elasticX(true)
+          .xUnits(d3.time[scope.settings.scale.value + 's'])
+          .centerBar(true)
+          .gap(1)
+          .renderHorizontalGridLines(true)
+          .renderVerticalGridLines(true)
+          .brushOn(true)
+          .title(function(d) { return "Value: " + d.value; })
+          .renderTitle(true)
+          .width(1000)
+          .height(120);
+      }
+
+
+      scope.chart.on('preRender', mkchart);
+      scope.chart.on('filtered', function(){
+        scope.globals.redraw('dc');
       });
-      var group = dimension.group().reduceCount();
-
-      var chart = dc.barChart('#' + component_id + ' .panel-body')
-        .width(400)
-        .height(120)
-        .dimension(dimension)
-        .group(group)
-        .x(d3.time.scale().domain([new Date("2013-01-01"), new Date("2013-12-31")]))
-        .elasticX(true)
-        .xUnits(d3.time[scale + 's'])
-        .centerBar(true)
-        .gap(1)
-        .renderHorizontalGridLines(true)
-        .renderVerticalGridLines(true)
-        .brushOn(true)
-        .title(function(d) { return "Value: " + d.value; })
-        .renderTitle(true);
-
-      globals.register_renderer('dc', dc.renderAll);
-      globals.register_redrawer('dc', dc.redrawAll);
-      chart.on('filtered', function(){
-        globals.redraw('dc');
+      scope.settings_changed = function(){
+        chart.render();
+      }
+      scope.globals.register_renderer('dc', function(){
+        dc.renderAll();
+      });
+      scope.globals.register_redrawer('dc', function(){
+        dc.redrawAll();
       });
     }
     return {
