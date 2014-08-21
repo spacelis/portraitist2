@@ -23,18 +23,38 @@ define(['underscore', 'lenz'], function(_, L){
     });
   }
 
+  var error2null = L.lenz(
+    function(x){
+      if(x instanceof Error) {
+        return null;
+      }
+      else {
+        return x;
+      }},
+    function(x, v){
+      return v;});
 
   // Return an extractor that will extract a subset of attributes of json
   // objects.
-  function extractor(projection){
-    var mapping = _.object(_.map(_.pairs(projection), function(d){
+  function extractor(mapping){
+    var m = _.object(_.map(_.pairs(mapping), function(d){
       var key = d[0], path = undotted(d[1]);
-      return [key, L.nested_properties(path).com(L.error2null)];
+      return [key, L.deep_property(path).then(error2null)];
     }));
-    return L.projector(mapping);
+    return L.projector(m);
   }
+
+  str2datetime = L.lenz(
+    function(a){
+      return new Date(a);
+    },
+    function(a, x){
+      return x.toString();
+    }); 
+
   return {
     extractor: extractor,
     undotted: undotted,
+    str2datetime: str2datetime,
   };
 });

@@ -11,7 +11,7 @@ define(['underscore'], function(_){
    * Example:
    *    var accessor_x = lenz(function(a){return a.x;}, function(a, v){return {x: v};});
    *    var accessor_y = lenz(function(a){return a.y;}, function(a, v){return {y: v};});
-   *    var accessor_xy = accessor_x.com(accessor_y)
+   *    var accessor_xy = accessor_x.then(accessor_y)
    *    assert(accessor_xy.get({x: {y: 1}}) == 1);
    */
   function lenz(get, set){
@@ -19,7 +19,7 @@ define(['underscore'], function(_){
     l.get = get;
     l.set = set;
     l.mod = function(modf, x){ return set(x, modf(get(x))); };
-    l.com = function(ol){
+    l.then = function(ol){
       return lenz(function(x){
         return ol.get(get(x));
       }, function(x, v){
@@ -30,7 +30,7 @@ define(['underscore'], function(_){
   }
 
   /*
-   * An idendity lenz where x.com(identity) == x == identity.com(x)
+   * An idendity lenz where x.then(identity) == x == identity.com(x)
    */
   var identity = lenz(function(x){return x;}, function(x, v){return v;});
 
@@ -65,14 +65,14 @@ define(['underscore'], function(_){
    */
   function chained(ls){
     return _.reduce(ls, function(acc, l){
-      return acc.com(l);
+      return acc.then(l);
     }, identity);
   }
 
   /*
    * Constructing a lenz for an object with a list of keys
    */
-  function nested_properties(keys){
+  function deep_property(keys){
     return chained(_.map(keys, property));
   }
 
@@ -82,7 +82,7 @@ define(['underscore'], function(_){
   function projector(mapping){
     return lenz(
       function(obj){
-        return _.object(_.keys(mapping), _.map(_.values(mapping), function(x){return x.get(obj);}));
+        return _.object(_.map(_.pairs(mapping), function(x){return [x[0], x[1].get(obj)];}));
       },
       function(obj, val){
         return _.reduce(_.pairs(mapping), function(acc, x){
@@ -92,23 +92,13 @@ define(['underscore'], function(_){
     );
   }
 
-  var error2null = lenz(
-    function(x){
-      if(x instanceof Error) {
-        return null;
-      }
-      else {
-        return x;
-      }},
-    function(x, v){return v;});
 
   return {
     lenz: lenz,
     property: property,
     identity: identity,
     chained: chained,
-    nested_properties: nested_properties,
+    deep_property: deep_property,
     projector: projector,
-    error2null: error2null,
   };
 });

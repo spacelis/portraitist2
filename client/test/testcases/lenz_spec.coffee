@@ -11,7 +11,7 @@ define ['lenz'], (lenz) ->
       obj = {a: {x: 1, y: 2}, b: 3}
       lenz_a = lenz.lenz ((x) -> x.a),  ((x, v) -> {a: v, b: x.b})
       lenz_x = lenz.lenz ((x) -> x.x),  ((x, v) -> {x: v, y: x.y})
-      lenz_ax = lenz_a.com lenz_x
+      lenz_ax = lenz_a.then lenz_x
       (expect lenz_ax.get obj).toEqual 1
       (expect lenz_ax.set obj, 10).toEqual {a: {x: 10, y: 2}, b: 3}
       (expect lenz_ax.mod ((x) -> x * 3), obj).toEqual {a: {x: 3, y: 2}, b: 3}
@@ -26,7 +26,7 @@ define ['lenz'], (lenz) ->
 
     it 'Composition', ->
       obj = {a: {x: 1, y: 2}, b: 3}
-      lenz_ax = (lenz.property 'a').com lenz.property 'x'
+      lenz_ax = (lenz.property 'a').then lenz.property 'x'
       (expect lenz_ax.get obj).toEqual 1
       (expect lenz_ax.set obj, 10).toEqual {a: {x: 10, y: 2}, b: 3}
       (expect lenz_ax.mod ((x) -> x * 3), obj).toEqual {a: {x: 3, y: 2}, b: 3}
@@ -48,17 +48,17 @@ define ['lenz'], (lenz) ->
       (expect lenz_axv.set obj, 10).toEqual {a: {x: {v: 10, w: 2}, y: 3}, b: 4}
       (expect lenz_axv.mod ((x) -> x + 4), obj).toEqual {a: {x: {v: 5, w: 2}, y: 3}, b: 4}
 
-  describe 'nested_properties', ->
+  describe 'deep_property', ->
     it '{x: {y: {z: 1}}}[x, y, z] == 1', ->
-      (expect (lenz.nested_properties ['x', 'y', 'z']).get {x: {y: {z: 1}}}).toEqual 1
+      (expect (lenz.deep_property ['x', 'y', 'z']).get {x: {y: {z: 1}}}).toEqual 1
     it '{x: {y: {z: 1}}}[x, y] == {z: 1}', ->
-      (expect ((lenz.nested_properties ['x', 'y']).get {x: {y: {z: 1}}})['z']).toEqual 1
+      (expect ((lenz.deep_property ['x', 'y']).get {x: {y: {z: 1}}})['z']).toEqual 1
 
   describe 'projector', ->
     it 'project {x: {y: {z: 1}, a: 2}} by {z: x.y.z, a: x.a}', ->
       obj = {x: {y: {z: 1}, a: 2}}
       zextr = lenz.projector
-        'z': lenz.nested_properties ['x', 'y', 'z']
-        'a': lenz.nested_properties ['x', 'a']
+        'z': lenz.deep_property ['x', 'y', 'z']
+        'a': lenz.deep_property ['x', 'a']
       (expect zextr.get obj).toEqual {z: 1, a: 2}
       (expect zextr.set obj, {z: 10, a: 20}).toEqual {x: {y: {z: 10}, a: 20}}
