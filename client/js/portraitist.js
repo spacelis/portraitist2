@@ -33,6 +33,7 @@ require([
     'angular',
     'bootstrap',
     '/components/js/datasource.js',
+    '/components/js/settingbox.js',
     '/components/js/chart.js',
     '/components/js/googlemap.js',
     '/components/js/tagcloud.js'
