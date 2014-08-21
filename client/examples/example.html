@@ -4,11 +4,11 @@
   </head>
   <body>
     <div ng-controller="ResourceCtrl as ctrl">
-      <datasource id="datasource-1" data-url="http://localhost:8080/examples/data/test.csv" data-parsetime="date"></datasource>
+      <datasource name="Data Source" id="datasource-1" data-url="http://localhost:9090/tp/1.1/statuses/user_timeline.json?screen_name=spacelis" data-parsetime="date"></datasource>
       <tagcloud id="tagcloud-1" data-dimension="text" name="MyTags"></tagcloud>
-      <timeline id="timeline-1" data-dimension="date" data-scale="hour" name="Timeline"></timeline>
-      <piechart id="piechart-2" data-dimension="event" name="Event"></piechart>
-      <googlemap id="map-1" data-format="name=pid,id=pid" name="MyMap"></googlemap>
+      <timeline id="timeline-1" data-dimension="created_at" data-scale="hour" name="Timeline"></timeline>
+      <piechart id="piechart-2" data-dimension="place" name="Place"></piechart>
+      <!-- <googlemap id="map&#45;1" data&#45;format="name=pid,id=pid" name="MyMap"></googlemap> -->
     </div>
     <script data-main="/js/portraitist" src="/lib/requirejs/require.js"></script>
     <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.css" type="text/css" media="screen" title="no title" charset="utf-8">

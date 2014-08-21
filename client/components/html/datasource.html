@@ -1,36 +1,15 @@
 <div class="panel panel-default">
-  <div class="panel-footer">
-    <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#{{widget_id}}-settings-modal">
-        <span class="glyphicon glyphicon-cog"></span>
-    </button>
-    Data Source</div>
+  <div class="panel-heading">
+    <settingbox/>{{widget_name}}
+  </div>
   <div class="panel-body" style="float: none">
 
-    <div class="form-inline" role="form">
-      <div class="form-group" style="width: 100%">
-        <input name="apiendpoint" type="text" class="form-control" style="width: 80%" placeholder="{{url}}" ng-model="url">
-        <button type="button" class="btn btn-primary" ng-click="get(url)">Load</button>
+      <div class="form-inline" role="form">
+        <div class="form-group" style="width: 100%">
+          <input name="apiendpoint" id="{{widget_id}}-source" type="text" class="form-control" placeholder="{{url}}" ng-model="url" style="width: 80%">
+          <button type="button" class="btn btn-primary" ng-click="get(url)">Load</button>
+        </div>
       </div>
-    </div>
-
-    <div class="modal fade" id='{{widget_id}}-settings-modal'>
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            <h4 class="modal-title">Data Source Settings</h4>
-          </div>
-          <div class="modal-body">
-            <label for="parsetime">Date/Time Fields: </label>
-            <input type="text" ng-model="parsetime" />
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
 
   </div>
 </div>
