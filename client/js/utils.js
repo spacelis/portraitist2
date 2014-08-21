@@ -7,6 +7,9 @@ define(['underscore', 'lenz'], function(_, L){
   var ptn_escape_number = /^@\d+$/;
   var ptn_unescape_at = /^@@/;
   function undotted(path){
+    if (path === undefined || path === ''){
+      return [];
+    }
     return _.map(_.map(path.match(ptn_path_element), function(pe){
       if(ptn_escape_number.test(pe)){
         return parseInt(pe.substr(1));
@@ -56,5 +59,6 @@ define(['underscore', 'lenz'], function(_, L){
     extractor: extractor,
     undotted: undotted,
     str2datetime: str2datetime,
+    error2null: error2null,
   };
 });
