@@ -4,14 +4,14 @@
   </head>
   <body>
     <div ng-controller="ResourceCtrl as ctrl">
-      <datasource name="Data Source" id="datasource-1" data-url="http://localhost:9090/tp/1.1/search/tweets.json?geocode=37.781157,-122.398720,1mi" data-parsetime="date"></datasource>
-      <tagcloud id="tagcloud-1" data-dimension="text" name="MyTags"></tagcloud>
-      <timeline id="timeline-1" data-dimension="created_at" data-scale="hour" name="Timeline"></timeline>
-      <piechart id="piechart-2" data-dimension="user.screen_name" name="Place"></piechart>
-      <!-- <googlemap id="map&#45;1" data&#45;format="name=pid,id=pid" name="MyMap"></googlemap> -->
+      <datasource name="Data Source" id="datasource" data-url="http://localhost:9090/tp/1.1/search/tweets.json?geocode=37.781157,-122.398720,1mi"></datasource>
+      <tagcloud name="MyTags" id="tagcloud" data-dimension="text"></tagcloud>
+      <timeline name="Timeline" id="timeline" data-dimension="created_at" data-scale="hour"></timeline>
+      <piechart name="User" id="piechart" data-dimension="user.screen_name"></piechart>
+      <googlemap name="TweetMap" id="map" data-dimension="geo.@1,geo.@0" ></googlemap>
     </div>
     <script data-main="/js/portraitist" src="/lib/requirejs/require.js"></script>
-    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.css" type="text/css" media="screen" title="no title" charset="utf-8">
-    <link rel="stylesheet" href="/lib/dc.js/dc.css" type="text/css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.css" type="text/css">
+    <link rel="stylesheet" href="/lib/dc.js/dc.css" type="text/css">
   </body>
 </html>
