@@ -1,0 +1,7 @@
+flask
+oauthlib
+mongoengine
+requests
+requests-oauthlib
+tweepy
+markupsafe
