@@ -29,15 +29,15 @@ define(['__portraitist', 'dc', 'crossfilter'], function(portraitist, dc, crossfi
         scope.redraw_handlers[name] = handler;
       },
       render: function(ignored){ // an handler can be ignored
-        for(var i in scope.render_handlers){
-          if (ignored && ignored === i) {continue;}
-          scope.render_handlers[i]();
+        for(var name in scope.render_handlers){
+          if (ignored && ignored === name) {continue;}
+          scope.render_handlers[name]();
         }
       },
       redraw: function(ignored){
-        for(var i in scope.redraw_handlers){
-          if (ignored && ignored === i) {continue;}
-          scope.redraw_handlers[i]();
+        for(var name in scope.redraw_handlers){
+          if (ignored && ignored === name) {continue;}
+          scope.redraw_handlers[name]();
         }
       }
     };

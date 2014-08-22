@@ -75,9 +75,8 @@ define(['angular', 'resource_ctrl', 'wordcloud', 'wordfreq', 'lenz', 'utils'], f
               }
             },
           click: function(item, dimension, event){
-            var e = jQuery.Event('keydown');
-            e.keyCode = 13;
-            $('#q').val(item[0]).trigger(e);
+            scope._dimension.filter(function(t){return t.contains(item[0]);});
+            scope.globals.redraw();
           },
           weightFactor: function(w){
             return w / list[0][1] * 50;

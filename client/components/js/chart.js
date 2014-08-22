@@ -43,7 +43,7 @@ define(['resource_ctrl', 'd3', 'dc', 'underscore', 'lenz', 'utils'], function(Re
         dc.renderAll();
       });
       scope.globals.register_redrawer('dc', function(){
-        dc.redrawAll
+        dc.redrawAll();
       });
     }
     return {
