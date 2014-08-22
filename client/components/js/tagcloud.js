@@ -1,9 +1,10 @@
 /* global define */
 
-define(['angular', 'resource_ctrl', 'wordcloud', 'wordfreq'], function(angular, ResourceCtrl, WordCloud, WordFreq){
+define(['angular', 'resource_ctrl', 'wordcloud', 'wordfreq', 'lenz', 'utils'], function(angular, ResourceCtrl, WordCloud, WordFreq, L, utils){
   console.log('construct directive wordcloud');
   return ResourceCtrl.directive('tagcloud', ['$parse', function(parse){
     console.log('init directive WORDCLOUD');
+    var LINKPTN = /((http(s)?:\/\/)?\w+\.\w+((\/)?[\w#!:.?+=&%@!\-\/]+)?)/;
 
     function HLBox(el){
       var self = this;
@@ -50,18 +51,17 @@ define(['angular', 'resource_ctrl', 'wordcloud', 'wordfreq'], function(angular, 
 
 
     function link(scope, element, attr){
-      scope.chart_name = attr.name;
-      var component_id = attr.id;
-      function selector(other){ return '#' + component_id + ' ' + other; }
+      scope.widget_id = attr.id;
+      scope.widget_name = attr.name;
+      scope.globals = scope.$parent.globals;
+      
+      scope.settings = {
+        dimension: {name: 'dimension', label: 'Field', type: 'text', tip: 'The name of a field.', value: attr.dimension || '' }, 
+      };
+      scope.accessor = L.deep_property(utils.undotted(scope.settings.dimension.value)).get;
 
-      var globals = scope.$parent.globals;
-      var dim = parse(attr.dimension);
-      var dimension = globals.data.dimension(dim);
-      var group = dimension.group().reduceCount();
-
-      var links = /((http(s)?:\/\/)?\w+\.\w+((\/)?[\w#!:.?+=&%@!\-\/]+)?)/;
+      function selector(other){ return '#' + scope.widget_id + ' ' + other; }
       var hlbox = new HLBox(angular.element(selector('canvas')));
-
       angular.element(selector('canvas')).mouseout(hlbox.hide_hlbox);
 
       function build_cloud2(list){
@@ -87,8 +87,9 @@ define(['angular', 'resource_ctrl', 'wordcloud', 'wordfreq'], function(angular, 
 
       function wf_preprocess(ds) {
         return ds.map(
-          function(d){return d.toLowerCase().replace(links, ' ').replace('http', ' ');});
+          function(d){return d.toLowerCase().replace(LINKPTN, ' ').replace('http', ' ');});
       }
+
       var wordfreq_opt = {
         workerUrl: '/lib/wordfreq/src/wordfreq.worker.js',
         stopWords: ['english1', 'english2'],
@@ -96,22 +97,29 @@ define(['angular', 'resource_ctrl', 'wordcloud', 'wordfreq'], function(angular, 
       };
       
 
-      var render = function (){
-        var wordprocessor = new WordFreq(wordfreq_opt);
-        var text = group.all().map(function(d){
-          if(d.value > 0){
-            return Array.apply(null, Array(d.value)).map(function(_){return d.key;}).join(' ');
-          } else {
-            return '';
-          }
-        }).filter(function(t){return t !== '';});
+      var wordprocessor = new WordFreq(wordfreq_opt);
+
+      function redraw(){
+        var text = scope._dimension.top(1000).map(scope.accessor);
+        wordprocessor.empty();
         wf_preprocess(text).forEach(function(d){wordprocessor.process(d);});
         wordprocessor.getList(function (list) {
           build_cloud2(list);
         });
+      }
+
+      var render = function (){
+        scope.accessor = L.deep_property(utils.undotted(scope.settings.dimension.value)).get;
+        if(scope._dimension){
+          scope._dimension.dispose();
+        }
+        scope._dimension = scope.globals.data.dimension(scope.accessor);
+        redraw();
       };
-      globals.register_renderer('wordcloud', render);
-      globals.register_redrawer('wordcloud', render);
+
+      scope.settings_changed = render;
+      scope.globals.register_renderer('wordcloud', render);
+      scope.globals.register_redrawer('wordcloud', redraw);
     } // end of link func
     return {
       scope: true,
