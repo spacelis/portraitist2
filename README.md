@@ -2,6 +2,7 @@
 
 
 A customizable and extensible work bench for exploring social media, a.k.a. Social Media Workbench.
+Please find a demo at http://demo-portraitist.a3c1.starter-us-west-1.openshiftapps.com/
 
 ## How to use
 
